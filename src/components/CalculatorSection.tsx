@@ -25,7 +25,7 @@ export function CalculatorSection({ km, result, onKmChange }: CalculatorSectionP
           <span className="font-display text-2xl font-bold text-on-surface">
             {km}
           </span>
-          <span className="ml-1 text-sm text-on-surface-variant">Mil</span>
+          <span className="ml-1 text-sm text-on-surface-variant">mil</span>
         </div>
 
         <div className="mb-2">

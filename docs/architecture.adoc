@@ -31,7 +31,7 @@ C4Context
   Rel(owner, calc, "Selects annual km via slider, views service interval and Toyota service info")
 ----
 
-The system has a single user role and no external system dependencies. The lookup data (körsträcka.json) and all visual assets are bundled within the application.
+The system has a single user role and no external system dependencies. The lookup data (korstracka.json) and all visual assets are bundled within the application.
 
 == Container View (C4 Level 2)
 
@@ -44,7 +44,7 @@ C4Container
 
   System_Boundary(calc, "Toyota Servicekalkylator") {
     Container(spa, "Single-Page Application", "React 19 + TypeScript", "Precision Design UI with navigation, hero, calculator, value cards, footer. Built with Vite 8, styled with Tailwind CSS v4.")
-    Container(data, "Lookup Data", "JSON", "körsträcka.json — 47 entries mapping annual km (1000-5500) to service intervals. Bundled at build time.")
+    Container(data, "Lookup Data", "JSON", "korstracka.json — 47 entries mapping annual km (1000-5500) to service intervals. Bundled at build time.")
   }
 
   Rel(owner, spa, "Uses", "Browser")
@@ -65,7 +65,7 @@ C4Component
     Component(topbar, "TopBar", "React component", "Dark brand bar with official Toyota SVG logo.")
     Component(hero, "HeroSection", "React component", "Full-width photo hero with Precision & Care tagline.")
     Component(calc, "CalculatorSection", "React component", "Range slider (1000-5500), live result display. Glassmorphism panel.")
-    Component(lookup, "lookupInterval", "TypeScript function", "Finds matching entry in körsträcka.json for a given km value.")
+    Component(lookup, "lookupInterval", "TypeScript function", "Finds matching entry in korstracka.json for a given km value.")
   }
 
   Rel(app, topbar, "Renders")
@@ -88,7 +88,7 @@ C4Component
 
 === Offline Operation (C-002)
 
-All assets are bundled at build time. The application makes zero network requests at runtime. Fonts are loaded from local @fontsource packages. Material Symbols icons are loaded from the local material-symbols package. The körsträcka.json lookup data is imported as a JS module during the Vite build.
+All assets are bundled at build time. The application makes zero network requests at runtime. Fonts are loaded from local @fontsource packages. Material Symbols icons are loaded from the local material-symbols package. The korstracka.json lookup data is imported as a JS module during the Vite build.
 
 === Licensing (C-001)
 

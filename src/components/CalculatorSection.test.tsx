@@ -13,7 +13,7 @@ describe("CalculatorSection", () => {
   it("displays the current km value", () => {
     render(<CalculatorSection km={2000} result={defaultResult} onKmChange={vi.fn()} />);
     expect(screen.getByText("2000")).toBeInTheDocument();
-    expect(screen.getByText("Mil")).toBeInTheDocument();
+    expect(screen.getByText("mil")).toBeInTheDocument();
   });
 
   it("displays days as primary figure", () => {

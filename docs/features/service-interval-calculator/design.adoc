@@ -91,7 +91,7 @@ src/
     lookup.ts               # lookupInterval() — unchanged
     validate.ts             # validateInput() — unchanged
   data/
-    körsträcka.json         # Lookup data — unchanged
+    korstracka.json         # Lookup data — unchanged
 ----
 
 === Components
