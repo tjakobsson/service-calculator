@@ -14,7 +14,7 @@
 
 == Overview
 
-The Toyota Servicekalkylator is a single-page static web application that calculates service intervals for Toyota vehicles based on annual driving distance. The user selects their yearly kilometres via an interactive range slider and sees the corresponding service interval in days (primary), months, and weeks.
+The Toyota Servicekalkylator is a single-page static web application that calculates service intervals for Toyota vehicles based on annual driving distance. The user selects their yearly driving distance in mil (Swedish miles) via an interactive range slider and sees the corresponding service interval in days (primary), months, and weeks.
 
 The application follows the "Precision Design" from the Stitch design system, featuring Toyota red branding (#bd0014), a hero section, value proposition cards, glassmorphism effects, and Material Symbols icons. It is entirely client-side with no backend, no database, and no external service dependencies. All logic, data, fonts, and icons are bundled into a static `dist/` directory. This satisfies constraint C-002 (fully offline operation).
 
@@ -28,7 +28,7 @@ C4Context
   Person(owner, "Toyota Vehicle Owner", "Wants to know when their next service is due")
   System(calc, "Toyota Servicekalkylator", "Static web application with Toyota branding that calculates service intervals from annual driving distance")
 
-  Rel(owner, calc, "Selects annual km via slider, views service interval and Toyota service info")
+  Rel(owner, calc, "Selects annual mil via slider, views service interval")
 ----
 
 The system has a single user role and no external system dependencies. The lookup data (korstracka.json) and all visual assets are bundled within the application.
@@ -44,7 +44,7 @@ C4Container
 
   System_Boundary(calc, "Toyota Servicekalkylator") {
     Container(spa, "Single-Page Application", "React 19 + TypeScript", "Precision Design UI with navigation, hero, calculator, value cards, footer. Built with Vite 8, styled with Tailwind CSS v4.")
-    Container(data, "Lookup Data", "JSON", "korstracka.json — 47 entries mapping annual km (1000-5500) to service intervals. Bundled at build time.")
+    Container(data, "Lookup Data", "JSON", "korstracka.json — 47 entries mapping annual mil (1000-5500) to service intervals. Bundled at build time.")
   }
 
   Rel(owner, spa, "Uses", "Browser")
@@ -61,11 +61,11 @@ C4Component
   title Component Diagram — Single-Page Application
 
   Container_Boundary(spa, "Single-Page Application") {
-    Component(app, "App", "React component", "Root shell. Manages slider km state, computes result via lookupInterval.")
+    Component(app, "App", "React component", "Root shell. Manages slider mil state, computes result via lookupInterval.")
     Component(topbar, "TopBar", "React component", "Dark brand bar with official Toyota SVG logo.")
     Component(hero, "HeroSection", "React component", "Full-width photo hero with Precision & Care tagline.")
     Component(calc, "CalculatorSection", "React component", "Range slider (1000-5500), live result display. Glassmorphism panel.")
-    Component(lookup, "lookupInterval", "TypeScript function", "Finds matching entry in korstracka.json for a given km value.")
+    Component(lookup, "lookupInterval", "TypeScript function", "Finds matching entry in korstracka.json for a given mil value.")
   }
 
   Rel(app, topbar, "Renders")
@@ -96,4 +96,4 @@ All runtime dependencies use permissive licenses: React (MIT), Radix UI (MIT), T
 
 === Input Handling
 
-The range slider constrains input to valid values (1000–5500, step 100) at the UI level. The `lookupInterval` function receives pre-validated values directly from the slider. Results update live as the slider moves — no form submission required.
+The range slider constrains input to valid values (1000–5500 mil, step 100) at the UI level. The `lookupInterval` function receives pre-validated values directly from the slider. Results update live as the slider moves — no form submission required.

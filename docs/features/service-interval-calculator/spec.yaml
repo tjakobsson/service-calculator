@@ -94,7 +94,7 @@ stories:
           prominent figure with the label "dagars serviceintervall".
         ears_type: event-driven
         verification: >-
-          Select 2000 km. Confirm the result prominently displays "270"
+          Select 2000 mil. Confirm the result prominently displays "270"
           with "dagars serviceintervall" as the primary figure.
 
       - id: SVC-007
@@ -104,7 +104,7 @@ stories:
           secondary information.
         ears_type: event-driven
         verification: >-
-          Select 2000 km. Confirm the result displays 9.0 månader and
+          Select 2000 mil. Confirm the result displays 9.0 månader and
           38.5 veckor below the primary days figure.
 
       - id: SVC-008
@@ -113,7 +113,7 @@ stories:
           interval of 12.0 months, 51.4 weeks, and 360 days.
         ears_type: event-driven
         verification: >-
-          Select 1000 km. Confirm the result displays 360 days, 12.0
+          Select 1000 mil. Confirm the result displays 360 days, 12.0
           månader, and 51.4 veckor.
 
       - id: SVC-009
@@ -122,7 +122,7 @@ stories:
           interval of 3.3 months, 14.0 weeks, and 98 days.
         ears_type: event-driven
         verification: >-
-          Select 5500 km. Confirm the result displays 98 days, 3.3
+          Select 5500 mil. Confirm the result displays 98 days, 3.3
           månader, and 14.0 veckor.
 
   - id: US-003

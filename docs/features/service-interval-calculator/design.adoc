@@ -98,7 +98,7 @@ src/
 
 ==== App (App.tsx)
 
-Root component. Manages slider state (`km: number`, default 1000) and computed result. Renders vertically: TopBar (full width), HeroSection (full width, flush with TopBar), CalculatorSection (centred, max-w-xl).
+Root component. Manages slider state (`km: number` — value in mil, default 1000) and computed result. Renders vertically: TopBar (full width), HeroSection (full width, flush with TopBar), CalculatorSection (centred, max-w-xl).
 
 ==== TopBar (TopBar.tsx)
 
@@ -152,7 +152,7 @@ Components:: CalculatorSection, App (state)
 Requirements::
 * SVC-001: Range slider 1000-5500 step 100 -> CalculatorSection renders `<input type="range">`
 * SVC-002: Accepts 1000-5500 -> slider min/max attributes enforce range
-* SVC-003: Real-time value display -> onChange updates displayed km value in Manrope bold
+* SVC-003: Real-time value display -> onChange updates displayed mil value in Manrope bold
 * SVC-004: Toyota red slider thumb -> custom CSS on range input thumb pseudo-element
 * SVC-005: Immediate result on change -> onChange triggers lookupInterval, result updates live
 
@@ -162,8 +162,8 @@ Components:: CalculatorSection, lookupInterval, App (state)
 Requirements::
 * SVC-006: Days as primary figure -> large "{dagar} dagars serviceintervall" display
 * SVC-007: Display months, weeks, days -> secondary area shows months and weeks, days is primary
-* SVC-008: 1000 km -> 12.0/51.4/360 -> lookupInterval returns correct entry
-* SVC-009: 5500 km -> 3.3/14.0/98 -> lookupInterval returns correct entry
+* SVC-008: 1000 mil -> 12.0/51.4/360 -> lookupInterval returns correct entry
+* SVC-009: 5500 mil -> 3.3/14.0/98 -> lookupInterval returns correct entry
 
 === US-003: Toyota Brand Bar
 
