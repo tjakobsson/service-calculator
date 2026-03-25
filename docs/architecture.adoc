@@ -1,0 +1,99 @@
+= System Architecture
+:version: 2.1.0
+:last-updated: 2026-03-25
+:toc:
+
+== Feature Design Sources
+
+[cols="1,1", options="header"]
+|===
+| Feature | Design Version
+
+| service-interval-calculator | 2.1.0
+|===
+
+== Overview
+
+The Toyota Servicekalkylator is a single-page static web application that calculates service intervals for Toyota vehicles based on annual driving distance. The user selects their yearly kilometres via an interactive range slider and sees the corresponding service interval in days (primary), months, and weeks.
+
+The application follows the "Precision Design" from the Stitch design system, featuring Toyota red branding (#bd0014), a hero section, value proposition cards, glassmorphism effects, and Material Symbols icons. It is entirely client-side with no backend, no database, and no external service dependencies. All logic, data, fonts, and icons are bundled into a static `dist/` directory. This satisfies constraint C-002 (fully offline operation).
+
+== System Context (C4 Level 1)
+
+[source,mermaid]
+----
+C4Context
+  title System Context Diagram
+
+  Person(owner, "Toyota Vehicle Owner", "Wants to know when their next service is due")
+  System(calc, "Toyota Servicekalkylator", "Static web application with Toyota branding that calculates service intervals from annual driving distance")
+
+  Rel(owner, calc, "Selects annual km via slider, views service interval and Toyota service info")
+----
+
+The system has a single user role and no external system dependencies. The lookup data (körsträcka.json) and all visual assets are bundled within the application.
+
+== Container View (C4 Level 2)
+
+[source,mermaid]
+----
+C4Container
+  title Container Diagram
+
+  Person(owner, "Toyota Vehicle Owner", "Selects driving distance")
+
+  System_Boundary(calc, "Toyota Servicekalkylator") {
+    Container(spa, "Single-Page Application", "React 19 + TypeScript", "Precision Design UI with navigation, hero, calculator, value cards, footer. Built with Vite 8, styled with Tailwind CSS v4.")
+    Container(data, "Lookup Data", "JSON", "körsträcka.json — 47 entries mapping annual km (1000-5500) to service intervals. Bundled at build time.")
+  }
+
+  Rel(owner, spa, "Uses", "Browser")
+  Rel(spa, data, "Imports at build time")
+----
+
+The application is a single container: a static SPA. The lookup data is an embedded JSON module. Vite bundles everything into static assets (HTML, JS, CSS, fonts, Material Symbols icons) at build time.
+
+== Component View (C4 Level 3)
+
+[source,mermaid]
+----
+C4Component
+  title Component Diagram — Single-Page Application
+
+  Container_Boundary(spa, "Single-Page Application") {
+    Component(app, "App", "React component", "Root shell. Manages slider km state, computes result via lookupInterval.")
+    Component(topbar, "TopBar", "React component", "Dark brand bar with official Toyota SVG logo.")
+    Component(hero, "HeroSection", "React component", "Full-width photo hero with Precision & Care tagline.")
+    Component(calc, "CalculatorSection", "React component", "Range slider (1000-5500), live result display. Glassmorphism panel.")
+    Component(lookup, "lookupInterval", "TypeScript function", "Finds matching entry in körsträcka.json for a given km value.")
+  }
+
+  Rel(app, topbar, "Renders")
+  Rel(app, hero, "Renders")
+  Rel(app, calc, "Renders, passes km/result/onKmChange")
+  Rel(app, lookup, "Calls on slider change")
+----
+
+== Technology Stack
+
+* **ADR-0001:** Test-Driven Development — Vitest 4.1 + React Testing Library 16.3 (see docs/adrs/0001-adopt-tdd.yaml)
+* **ADR-0002:** Vite 8, React 19, Tailwind CSS 4.2, Radix UI 1.4 (see docs/adrs/0002-frontend-stack.yaml)
+* **Fonts:** Manrope (headlines) and Inter (body) via @fontsource, bundled locally (OFL licensed)
+* **Icons:** Material Symbols Outlined via `material-symbols` npm package (Apache-2.0), bundled locally
+* **Design:** Toyota Precision Design — Toyota red (#bd0014) primary, tonal surface layering, glassmorphism, no borders
+* **Build output:** Static `dist/` directory — HTML, JS, CSS, font files, icon font. No runtime server required.
+* **Skill tooling:** Python 3.14 with uv (pyyaml, jsonschema, jinja2) — used only for validation scripts, not part of the application.
+
+== Cross-Cutting Concerns
+
+=== Offline Operation (C-002)
+
+All assets are bundled at build time. The application makes zero network requests at runtime. Fonts are loaded from local @fontsource packages. Material Symbols icons are loaded from the local material-symbols package. The körsträcka.json lookup data is imported as a JS module during the Vite build.
+
+=== Licensing (C-001)
+
+All runtime dependencies use permissive licenses: React (MIT), Radix UI (MIT), Tailwind CSS (MIT), @fontsource packages (MIT with OFL font files), material-symbols (Apache-2.0). No copyleft dependencies.
+
+=== Input Handling
+
+The range slider constrains input to valid values (1000–5500, step 100) at the UI level. The `lookupInterval` function receives pre-validated values directly from the slider. Results update live as the slider moves — no form submission required.

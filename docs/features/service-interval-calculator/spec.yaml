@@ -1,0 +1,239 @@
+# yaml-language-server: $schema=../../../skills/needs-features/schemas/feature-spec.schema.json
+# Feature specification: service-interval-calculator
+# Toyota Servicekalkylator — Simplified Precision Design
+
+schema_version: "1.0.0"
+feature: service-interval-calculator
+prefix: SVC
+version: "2.1.0"
+last_updated: "2026-03-25"
+
+constraint_notes:
+  - constraint: >-
+      Only permissive open-source licenses (MIT, Apache-2.0, BSD, ISC) are
+      permitted. Copyleft licenses (GPL, LGPL, AGPL, MPL) are prohibited.
+    category: Licensing
+    note: >-
+      All dependencies must use permissive licenses. Material Symbols icon
+      font is Apache-2.0. Toyota Brand Hub assets used under brand guidelines.
+
+  - constraint: >-
+      The application must not depend on any external online resources at
+      runtime. All assets (fonts, icons, stylesheets, scripts) must be
+      bundled or self-hosted.
+    category: Offline capability
+    note: >-
+      Fonts (Manrope, Inter), Material Symbols icons, hero photograph, and
+      the lookup data are all bundled. No CDN or external API calls.
+
+stories:
+  - id: US-001
+    title: Select Annual Driving Distance via Slider
+    narrative:
+      as_a: Toyota vehicle owner
+      i_want: to select my annual driving distance using an interactive range slider
+      so_that: I can quickly and intuitively set my driving distance
+    requirements:
+      - id: SVC-001
+        text: >-
+          The system shall display a range slider input for annual driving
+          distance (årlig körsträcka) with values from 1000 to 5500 in
+          steps of 100.
+        ears_type: ubiquitous
+        verification: >-
+          Open the application. Confirm a range slider is visible with
+          labelled endpoints showing 1000 Mil and 5500 Mil.
+
+      - id: SVC-002
+        text: >-
+          The system shall accept numeric values between 1000 and 5500
+          inclusive as valid annual driving distances.
+        ears_type: ubiquitous
+        verification: >-
+          Drag the slider to various positions. Confirm that only values
+          between 1000 and 5500 are selectable.
+
+      - id: SVC-003
+        text: >-
+          When the user moves the slider, the system shall display the
+          currently selected value prominently in real time.
+        ears_type: event-driven
+        verification: >-
+          Drag the slider. Confirm the displayed value updates in real time
+          with prominent typography.
+
+      - id: SVC-004
+        text: >-
+          The range slider thumb shall be styled as a circular Toyota red
+          handle with a white border.
+        ears_type: ubiquitous
+        verification: >-
+          Inspect the slider thumb. Confirm it is a circle with Toyota red
+          background and a white border.
+
+      - id: SVC-005
+        text: >-
+          When the user moves the slider to a valid position, the system
+          shall immediately calculate and display the service interval result.
+        ears_type: event-driven
+        verification: >-
+          Move the slider to 2000. Confirm the result appears immediately
+          without needing to click a separate submit button.
+
+  - id: US-002
+    title: View Service Interval Result
+    narrative:
+      as_a: Toyota vehicle owner
+      i_want: to see my calculated service interval displayed prominently
+      so_that: I know how often to schedule service
+    requirements:
+      - id: SVC-006
+        text: >-
+          When the user selects a valid annual driving distance, the system
+          shall display the service interval in days as the primary
+          prominent figure with the label "dagars serviceintervall".
+        ears_type: event-driven
+        verification: >-
+          Select 2000 km. Confirm the result prominently displays "270"
+          with "dagars serviceintervall" as the primary figure.
+
+      - id: SVC-007
+        text: >-
+          When the user selects a valid annual driving distance, the system
+          shall display the service interval in months and weeks as
+          secondary information.
+        ears_type: event-driven
+        verification: >-
+          Select 2000 km. Confirm the result displays 9.0 månader and
+          38.5 veckor below the primary days figure.
+
+      - id: SVC-008
+        text: >-
+          When the user selects 1000 km, the system shall display a service
+          interval of 12.0 months, 51.4 weeks, and 360 days.
+        ears_type: event-driven
+        verification: >-
+          Select 1000 km. Confirm the result displays 360 days, 12.0
+          månader, and 51.4 veckor.
+
+      - id: SVC-009
+        text: >-
+          When the user selects 5500 km, the system shall display a service
+          interval of 3.3 months, 14.0 weeks, and 98 days.
+        ears_type: event-driven
+        verification: >-
+          Select 5500 km. Confirm the result displays 98 days, 3.3
+          månader, and 14.0 veckor.
+
+  - id: US-003
+    title: See Toyota Branding
+    narrative:
+      as_a: Toyota vehicle owner
+      i_want: to see Toyota branding on the page
+      so_that: I trust the tool is official
+    requirements:
+      - id: SVC-010
+        text: >-
+          The system shall display the official Toyota logo in a dark
+          brand bar at the top of the page.
+        ears_type: ubiquitous
+        verification: >-
+          Open the application. Confirm the Toyota logo is visible in a
+          dark bar at the top of the page.
+
+  - id: US-004
+    title: See an Inviting Hero
+    narrative:
+      as_a: Toyota vehicle owner
+      i_want: to see an inviting hero section with a Toyota photograph
+      so_that: I feel the tool is professional and trustworthy
+    requirements:
+      - id: SVC-011
+        text: >-
+          The system shall display a full-width hero section with a
+          Toyota photograph background, dark overlay, and the tagline
+          "Precision & Care" with the title "Service-kalkylator".
+        ears_type: ubiquitous
+        verification: >-
+          Open the application. Confirm the hero spans full width directly
+          below the brand bar, shows a photograph with dark overlay, and
+          displays the tagline and title in white text.
+
+      - id: SVC-012
+        text: >-
+          The hero section shall use a locally bundled photograph rather
+          than loading it from an external source.
+        ears_type: ubiquitous
+        verification: >-
+          Open browser dev tools network panel. Confirm the hero image
+          loads from a bundled asset, not an external URL.
+
+  - id: US-005
+    title: Experience the Precision Design
+    narrative:
+      as_a: Toyota vehicle owner
+      i_want: to use a polished interface with Toyota branding
+      so_that: I trust the result and have a premium experience
+    requirements:
+      - id: SVC-013
+        text: >-
+          The system shall use Toyota red (#bd0014) as the primary accent
+          colour for interactive elements and branding.
+        ears_type: ubiquitous
+        verification: >-
+          Open the application. Confirm the slider thumb and primary result
+          figure use Toyota red.
+
+      - id: SVC-014
+        text: >-
+          The system shall use a light neutral background palette with
+          tonal surface layering and no visible border lines for sectioning.
+        ears_type: ubiquitous
+        verification: >-
+          Inspect the layout. Confirm content sections use background colour
+          shifts rather than 1px borders.
+
+      - id: SVC-015
+        text: >-
+          The system shall apply glassmorphism effects to the calculator
+          panel using a semi-transparent background with backdrop blur.
+        ears_type: ubiquitous
+        verification: >-
+          Inspect the calculator panel. Confirm it uses a semi-transparent
+          white background with a visible backdrop blur effect.
+
+      - id: SVC-016
+        text: >-
+          The system shall render correctly at a desktop viewport width of
+          1280 pixels or greater.
+        ears_type: ubiquitous
+        verification: >-
+          Open the application at 1280px viewport width. Confirm the layout
+          renders correctly without horizontal scrolling.
+
+      - id: SVC-017
+        text: >-
+          The system shall use locally bundled Manrope and Inter font files
+          for all typography.
+        ears_type: ubiquitous
+        verification: >-
+          Open browser dev tools network panel. Confirm no external font
+          requests and that Manrope and Inter load from local files.
+
+      - id: SVC-018
+        text: >-
+          The system shall load and render completely using only bundled
+          assets without any network requests.
+        ears_type: ubiquitous
+        verification: >-
+          Disconnect from the network. Load the application. Confirm full
+          rendering with all fonts, icons, photo, styles, and functionality.
+
+      - id: SVC-019
+        text: >-
+          The system shall bundle Material Symbols icons locally rather
+          than loading them from an external CDN.
+        ears_type: ubiquitous
+        verification: >-
+          Open browser dev tools network panel. Confirm no requests to
+          external CDNs for icon fonts.

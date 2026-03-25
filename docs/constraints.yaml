@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../skills/proven-needs/schemas/constraints.schema.json
+
+schema_version: "1.0.0"
+version: "1.0.0"
+last_updated: "2026-03-25"
+
+categories:
+  - name: Licensing
+    constraints:
+      - id: C-001
+        text: >-
+          Only permissive open-source licenses (MIT, Apache-2.0, BSD, ISC) are
+          permitted. Copyleft licenses (GPL, LGPL, AGPL, MPL) are prohibited.
+        rationale: Avoid viral licensing obligations that could restrict distribution.
+        added: "2026-03-25"
+
+  - name: Offline capability
+    constraints:
+      - id: C-002
+        text: >-
+          The application must not depend on any external online resources at
+          runtime. All assets (fonts, icons, stylesheets, scripts) must be
+          bundled or self-hosted.
+        rationale: The application must work fully offline without network access.
+        added: "2026-03-25"

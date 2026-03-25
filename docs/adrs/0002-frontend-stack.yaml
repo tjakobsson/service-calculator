@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=../../skills/needs-adr/schemas/adr.schema.json
+
+schema_version: "1.0.0"
+id: ADR-0002
+title: Use Vite, React, Tailwind CSS, and Radix UI for Frontend
+status: Accepted
+date: "2026-03-25"
+deciders: Project owner
+
+context: >-
+  The Toyota Servicekalkylator is a single-page static web application. It
+  needs a modern frontend stack that produces a static build with no backend
+  server required. The UI follows a custom "Precision Design" system with
+  specific typography (Manrope, Inter), tonal surface layering, and accessible
+  components. All assets must be bundled for offline use (C-002). All
+  dependencies must use permissive licenses (C-001).
+
+decision: >-
+  Use Vite as the build tool with React for UI components, Tailwind CSS for
+  utility-first styling, and Radix UI for accessible headless primitives.
+  Fonts are bundled via @fontsource/manrope and @fontsource/inter (MIT
+  licensed npm packages that include OFL-licensed font files). The
+  application is built as a static site via "vite build" producing a dist/
+  directory with no runtime server dependency.
+
+consequences:
+  easier:
+    - Fast development with Vite HMR and minimal configuration
+    - Tailwind CSS maps directly to the Precision Design tonal surface system
+    - Radix UI provides accessible primitives without imposing visual opinions
+    - Static output is trivially deployable and works fully offline
+    - All chosen dependencies use permissive licenses (MIT, OFL)
+  harder:
+    - Adding server-side functionality later would require a separate backend or migration to a fullstack framework
+    - Radix UI primitives require manual styling to match the Precision Design system
+
+alternatives:
+  - name: Next.js with static export
+    reason_rejected: >-
+      Significantly heavier framework for a single-page calculator. The
+      static export mode works but brings unnecessary complexity (routing,
+      SSR infrastructure) that this application does not need.
+
+  - name: Astro with React islands
+    reason_rejected: >-
+      Designed for content-heavy static sites with islands of interactivity.
+      The calculator is a single interactive page, making the island
+      architecture an unnecessary abstraction layer.
+
+  - name: Plain HTML and vanilla JavaScript
+    reason_rejected: >-
+      Would work for the current scope but lacks component composition,
+      type safety, and the ecosystem needed if the application grows.
+      Tailwind CSS integration would also require a build step regardless.

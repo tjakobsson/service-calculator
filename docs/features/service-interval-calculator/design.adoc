@@ -1,0 +1,191 @@
+= Design: Service Interval Calculator — Precision Design
+:version: 2.1.0
+:source-spec-version: 2.1.0
+:status: Current
+:last-updated: 2026-03-25
+:feature: service-interval-calculator
+:toc:
+
+== Technical Context
+
+The Toyota Servicekalkylator is a focused, clean single-page calculator. The UI was simplified from the initial Stitch mockup to centre attention on the core calculator functionality. Navigation, value proposition cards, and footer sections were removed in favour of a minimal layout: Toyota brand bar, photo hero, and calculator.
+
+== Decisions and Constraints
+
+* ADR-0001: TDD adopted (see docs/adrs/0001-adopt-tdd.yaml)
+* ADR-0002: Vite 8, React 19, Tailwind CSS 4.2, Radix UI 1.4 (see docs/adrs/0002-frontend-stack.yaml)
+* C-001: Permissive licenses only
+* C-002: Fully offline — all assets bundled (fonts, icons, hero photo, data)
+
+== Research and Unknowns
+
+=== Resolved
+
+Primary colour:: Toyota red (#bd0014 primary, #eb0a1e container). Confirmed via Toyota Brand Hub guidelines.
+
+Range slider:: Native `<input type="range">` with custom CSS for Toyota red thumb. Real-time updates on change — no submit button.
+
+Hero photograph:: Bundled from Toyota Brand Hub photography guidelines. Full-width with dark overlay for text legibility.
+
+Toyota logo:: Official Toyota SVG (red emblem + white wordmark) from brand.toyota.com, inlined as a React component.
+
+Material Symbols:: Bundled via `material-symbols` npm package (Apache-2.0). Only Outlined variant imported.
+
+=== Open Questions
+
+None.
+
+== System Design
+
+=== Component Interaction
+
+[source,mermaid]
+----
+flowchart TB
+    subgraph App["App Shell"]
+        TopBar["TopBar\n(Toyota logo)"]
+        Hero["HeroSection\n(photo + tagline)"]
+        Calc["CalculatorSection\n(slider + result)"]
+    end
+
+    subgraph Data["Data Layer (unchanged)"]
+        Lookup["lookupInterval()"]
+    end
+
+    Calc -->|"slider value"| Lookup
+    Lookup -->|"interval result"| Calc
+----
+
+=== Application State
+
+[source,mermaid]
+----
+stateDiagram-v2
+    [*] --> DefaultResult : App loads with slider at 1000
+    DefaultResult --> UpdatedResult : Slider moved
+    UpdatedResult --> UpdatedResult : Slider moved again
+----
+
+The app always shows a result. The slider defaults to 1000 and the result updates live.
+
+=== Project Structure
+
+----
+src/
+  main.tsx
+  App.tsx                   # Shell — TopBar, HeroSection, CalculatorSection
+  index.css                 # Tailwind + @fontsource + Material Symbols + @theme + slider CSS
+  test-setup.ts
+  vite-env.d.ts
+  assets/
+    hero.jpg                # Toyota Brand Hub photograph (bundled)
+  components/
+    TopBar.tsx              # Dark bar with Toyota logo
+    ToyotaLogo.tsx          # Official Toyota SVG (emblem + wordmark)
+    HeroSection.tsx         # Full-width photo hero with tagline overlay
+    CalculatorSection.tsx   # Range slider + live result display
+    Navbar.tsx              # (unused — retained for potential future use)
+    ValueCards.tsx          # (unused — retained for potential future use)
+    FooterSection.tsx       # (unused — retained for potential future use)
+  lib/
+    lookup.ts               # lookupInterval() — unchanged
+    validate.ts             # validateInput() — unchanged
+  data/
+    körsträcka.json         # Lookup data — unchanged
+----
+
+=== Components
+
+==== App (App.tsx)
+
+Root component. Manages slider state (`km: number`, default 1000) and computed result. Renders vertically: TopBar (full width), HeroSection (full width, flush with TopBar), CalculatorSection (centred, max-w-xl).
+
+==== TopBar (TopBar.tsx)
+
+Dark (`bg-on-surface`) horizontal bar spanning full width. Contains the official Toyota logo SVG (ToyotaLogo component) at height 24px, left-aligned.
+
+==== ToyotaLogo (ToyotaLogo.tsx)
+
+Inline SVG of the official Toyota horizontal logo: red square emblem with white triple-ellipse mark + white "TOYOTA" wordmark. Sourced from brand.toyota.com.
+
+==== HeroSection (HeroSection.tsx)
+
+Full-width section with a bundled Toyota photograph (`src/assets/hero.jpg`) as CSS background-image. Dark overlay (bg-black/50) for text legibility. Contains:
+
+* Tagline: "Precision & Care" in small uppercase Inter, white at 70% opacity
+* Title: "Service-kalkylator" in Manrope bold, white
+
+Flush against TopBar above (no gap). Provides visual Toyota branding context.
+
+==== CalculatorSection (CalculatorSection.tsx)
+
+Glassmorphism panel (bg-white/80 backdrop-blur-xl, rounded-2xl, ambient shadow). Contains:
+
+* Label: "Årlig körsträcka" with description "Ange hur många mil du kör per år"
+* Range slider: `<input type="range" min="1000" max="5500" step="100">`
+  - Custom CSS: Toyota red thumb (24px circle, white border, shadow)
+* Current value: displayed prominently in Manrope bold 2xl between range labels
+* Range labels: "1000 Mil" on left, "5500 Mil" on right
+* Result display:
+  - Primary: "{dagar} dagars serviceintervall" in large Manrope bold, Toyota red
+  - Secondary: "{months} månader" and "{weeks} veckor" in Inter
+
+Props: `km`, `result`, `onKmChange`.
+
+=== Styling Strategy
+
+Tailwind CSS v4 `@theme` tokens:
+
+* **Primary colours:** `primary` (#bd0014), `primary-container` (#eb0a1e), `primary-dark` (#9a0010)
+* **Surfaces:** surface (#fbf9f9), surface-container-low (#f3f3f3), surface-container-highest (#dbdad9), surface-container-lowest (#ffffff)
+* **Fonts:** font-display (Manrope), font-body (Inter)
+* **Icons:** Material Symbols Outlined via `material-symbols` npm package
+* **Glassmorphism:** `bg-white/80 backdrop-blur-xl` on calculator panel
+* **Slider thumb:** Custom CSS, 24px circle, Toyota red, white 4px border, drop shadow
+* **No borders:** Tonal surface layering only
+
+== Requirement Resolution
+
+=== US-001: Select Annual Driving Distance via Slider
+
+Components:: CalculatorSection, App (state)
+Requirements::
+* SVC-001: Range slider 1000-5500 step 100 -> CalculatorSection renders `<input type="range">`
+* SVC-002: Accepts 1000-5500 -> slider min/max attributes enforce range
+* SVC-003: Real-time value display -> onChange updates displayed km value in Manrope bold
+* SVC-004: Toyota red slider thumb -> custom CSS on range input thumb pseudo-element
+* SVC-005: Immediate result on change -> onChange triggers lookupInterval, result updates live
+
+=== US-002: View Service Interval Result
+
+Components:: CalculatorSection, lookupInterval, App (state)
+Requirements::
+* SVC-006: Days as primary figure -> large "{dagar} dagars serviceintervall" display
+* SVC-007: Display months, weeks, days -> secondary area shows months and weeks, days is primary
+* SVC-008: 1000 km -> 12.0/51.4/360 -> lookupInterval returns correct entry
+* SVC-009: 5500 km -> 3.3/14.0/98 -> lookupInterval returns correct entry
+
+=== US-003: Toyota Brand Bar
+
+Components:: TopBar, ToyotaLogo
+Requirements::
+* SVC-010: Toyota brand presence -> TopBar renders official logo on dark background
+
+=== US-004: Hero with Photography
+
+Components:: HeroSection
+Requirements::
+* SVC-011: Hero with tagline and title -> HeroSection renders "Precision & Care" + "Service-kalkylator"
+* SVC-012: Photograph background -> Bundled Toyota Brand Hub image with dark overlay
+
+=== US-005: Experience the Precision Design
+
+Components:: All components, Tailwind config
+Requirements::
+* SVC-013: Toyota red primary -> @theme sets primary to #bd0014
+* SVC-014: Tonal layering, no borders -> surface token shifts, no border-* utilities
+* SVC-015: Glassmorphism -> bg-white/80 backdrop-blur-xl on calculator panel
+* SVC-016: Desktop 1280px -> max-width container, no overflow
+* SVC-017: Bundled Manrope and Inter -> @fontsource imports
+* SVC-018: Fully offline -> all assets in dist/, no network requests
+* SVC-019: Bundled Material Symbols -> material-symbols npm package

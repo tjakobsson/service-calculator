@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../../skills/needs-adr/schemas/adr-index.schema.json
+
+schema_version: "1.0.0"
+version: "1.1.0"
+last_updated: "2026-03-25"
+
+decisions:
+  - id: ADR-0001
+    title: Adopt Test-Driven Development
+    status: Accepted
+    date: "2026-03-25"
+    file: 0001-adopt-tdd.yaml
+
+  - id: ADR-0002
+    title: Use Vite, React, Tailwind CSS, and Radix UI for Frontend
+    status: Accepted
+    date: "2026-03-25"
+    file: 0002-frontend-stack.yaml

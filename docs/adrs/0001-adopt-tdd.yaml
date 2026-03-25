@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=../../skills/needs-adr/schemas/adr.schema.json
+
+schema_version: "1.0.0"
+id: ADR-0001
+title: Adopt Test-Driven Development
+status: Accepted
+date: "2026-03-25"
+deciders: Project owner
+
+context: >-
+  The project is a greenfield Python web application (Toyota Servicekalkylator).
+  Feature requirements are specified as EARS requirements in spec.yaml files.
+  A testing strategy is needed to ensure requirements are verifiable and that
+  implementations satisfy their specifications before delivery.
+
+decision: >-
+  Adopt test-driven development (TDD). Tests will be derived from EARS
+  requirements in spec.yaml before implementation begins. For each task in the
+  task graph, the needs-tests capability will generate executable test cases
+  from the task's associated requirements. Implementation code is then written
+  to make those tests pass.
+
+consequences:
+  easier:
+    - Requirements are verified automatically against the implementation
+    - Regressions are caught early through the test suite
+    - Specification-to-test traceability is maintained
+    - Refactoring is safer with a comprehensive test suite
+  harder:
+    - Initial development takes longer due to upfront test writing
+    - Test maintenance overhead as requirements evolve
+    - Requires discipline to write tests before implementation code
+
+alternatives:
+  - name: Manual verification only
+    reason_rejected: >-
+      Relying solely on manual verification against spec.yaml requirements
+      does not scale and provides no regression safety net. Changes to one
+      feature could silently break another.
+
+  - name: Tests after implementation
+    reason_rejected: >-
+      Writing tests after implementation risks tests that verify the code
+      rather than the requirements. TDD ensures tests are derived from
+      specifications, not shaped by implementation details.

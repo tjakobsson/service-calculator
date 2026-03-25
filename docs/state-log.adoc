@@ -1,0 +1,44 @@
+= State Transition Log
+:last-updated: 2026-03-25
+
+== TRANSITION-003
+:date: 2026-03-25
+:intent: Simplify UI — remove nav/cards/footer, add Toyota logo, photo hero, fix label and result text
+:type: Artifact maintenance
+:risk: Medium
+:features: service-interval-calculator (refined)
+:desired-state: Clean focused layout with Toyota brand bar, photo hero, and calculator only
+:prior-state: Full Stitch mockup with navbar, value cards, footer sections
+:capabilities-planned: design sync, spec sync, architecture sync
+:capabilities-invoked: design sync, spec sync, architecture sync
+:constraints-checked: Licensing (pass), Offline capability (pass)
+:result: Achieved
+:artifacts-modified: spec.yaml (v2.1.0), design.adoc (v2.1.0), architecture.adoc (v2.1.0), source code (TopBar, HeroSection, CalculatorSection, App)
+
+== TRANSITION-002
+:date: 2026-03-25
+:intent: Rebuild UI to match Stitch "Precision Design" screen — Toyota red, hero, range slider, nav, value cards, footer, glassmorphism
+:type: Feature evolution
+:risk: High
+:features: service-interval-calculator (extended)
+:desired-state: UI matches the Stitch Precision Design mockup with Toyota branding, rich layout sections, and range slider input
+:prior-state: Minimal calculator UI with text input, blue accent, no navigation or marketing sections
+:capabilities-planned: needs-features, needs-design, needs-tasks, needs-implementation, needs-architecture
+:capabilities-invoked: needs-features, needs-design, needs-tasks, needs-implementation, needs-architecture
+:constraints-checked: Licensing (pass), Offline capability (pass)
+:result: Achieved
+:artifacts-modified: docs/features/service-interval-calculator/spec.yaml (v2.0.0), docs/features/service-interval-calculator/design.adoc (v2.0.0), docs/features/service-interval-calculator/tasks.yaml (v2.0.0 — Implemented), docs/architecture.adoc (v2.0.0), source code (src/)
+
+== TRANSITION-001
+:date: 2026-03-25
+:intent: Toyota Servicekalkylator -- users can calculate service intervals from annual driving distance
+:type: Feature evolution
+:risk: High
+:features: service-interval-calculator (new)
+:desired-state: A static web application where Toyota vehicle owners enter annual driving distance and see their service interval in months, weeks, and days
+:prior-state: Greenfield -- skeleton Python project with no features, no code, no docs
+:capabilities-planned: needs-features, needs-design, needs-tasks, needs-implementation, needs-architecture
+:capabilities-invoked: needs-features, needs-design, needs-tasks, needs-implementation, needs-architecture
+:constraints-checked: Licensing (pass), Offline capability (pass)
+:result: Achieved
+:artifacts-modified: docs/features/service-interval-calculator/spec.yaml (v1.0.0), docs/features/service-interval-calculator/design.adoc (v1.1.0), docs/features/service-interval-calculator/tasks.yaml (v1.0.0 — Implemented), docs/adrs/0001-adopt-tdd.yaml, docs/adrs/0002-frontend-stack.yaml, docs/constraints.yaml (v1.0.0), docs/architecture.adoc (v1.0.0), source code (src/)

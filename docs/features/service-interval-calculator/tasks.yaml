@@ -1,0 +1,121 @@
+# yaml-language-server: $schema=../../../skills/needs-tasks/schemas/tasks.schema.json
+# Implementation tasks: service-interval-calculator — Precision Design rebuild
+
+schema_version: "3.0.0"
+feature: service-interval-calculator
+version: "2.0.0"
+status: Implemented
+source_design_version: "2.0.0"
+source_spec_version: "2.0.0"
+last_updated: "2026-03-25"
+
+overview: >-
+  UI rebuild to match Stitch Precision Design. 7 tasks. Data layer unchanged.
+  Foundation (theme + icons) -> Components (navbar, hero, calculator, cards,
+  footer) -> App integration. TDD per task.
+
+tasks:
+  - id: TASK-001
+    title: Update theme tokens and install Material Symbols
+    done: true
+    depends_on: []
+    components: [Tailwind config, index.css]
+    stories: [US-007]
+    requirements: [SVC-020, SVC-024, SVC-025, SVC-026]
+    description: >-
+      Update @theme in index.css: change primary to #bd0014, primary-dark to
+      #9a0010, add primary-container #eb0a1e. Keep surface tokens. Install
+      material-symbols npm package. Import material-symbols/outlined.css in
+      index.css. Verify build bundles icon font locally. Remove old blue
+      colour tokens.
+
+  - id: TASK-002
+    title: Build Navbar component
+    done: true
+    depends_on: [TASK-001]
+    components: [Navbar]
+    stories: [US-003]
+    requirements: [SVC-010, SVC-011]
+    description: >-
+      Create src/components/Navbar.tsx. Top bar with left-side links
+      (Kalkylator, Serviceintervall, Hitta Verkstad) and right-side Material
+      Symbols icons (account_circle, settings). Use surface background with
+      subtle glassmorphism. Write RTL tests: renders three nav links, renders
+      account and settings icons.
+
+  - id: TASK-003
+    title: Build HeroSection component
+    done: true
+    depends_on: [TASK-001]
+    components: [HeroSection]
+    stories: [US-004]
+    requirements: [SVC-012, SVC-013, SVC-014]
+    description: >-
+      Create src/components/HeroSection.tsx. Renders precision_manufacturing
+      Material Symbols icon in Toyota red, "Precision & Care" tagline in
+      uppercase Inter, "Service-kalkylator" title in large Manrope bold,
+      and a Swedish subtitle paragraph. Surface-container-low background.
+      Write RTL tests: renders tagline, title, subtitle text.
+
+  - id: TASK-004
+    title: Build CalculatorSection with range slider and live result
+    done: true
+    depends_on: [TASK-001]
+    components: [CalculatorSection, lookupInterval]
+    stories: [US-001, US-002]
+    requirements: [SVC-001, SVC-002, SVC-003, SVC-004, SVC-005, SVC-006, SVC-007, SVC-008, SVC-009]
+    description: >-
+      Create src/components/CalculatorSection.tsx. Props: km, result,
+      onKmChange. Renders labelled range slider (min=1000, max=5500,
+      step=100) with custom CSS for Toyota red thumb (24px circle, white
+      border, shadow). Displays current km value, range labels (0 Mil,
+      5500 Mil). Result area: primary "{dagar} dagar kvar" in large Manrope,
+      secondary months/weeks in Inter. Glassmorphism panel (bg-white/80
+      backdrop-blur-xl). Add custom slider CSS in index.css. Write RTL
+      tests: renders slider, displays value, shows result, boundary values
+      1000 and 5500 produce correct results.
+
+  - id: TASK-005
+    title: Build ValueCards component
+    done: true
+    depends_on: [TASK-001]
+    components: [ValueCards]
+    stories: [US-005]
+    requirements: [SVC-015, SVC-016, SVC-017]
+    description: >-
+      Create src/components/ValueCards.tsx. Three cards in horizontal grid:
+      (1) verified icon + "Bevara garantin", (2) security icon + "Maximal
+      säkerhet", (3) handyman icon + "Hitta din verkstad" + "Boka nu" button.
+      Cards on surface-container-lowest with ambient shadow. Write RTL tests:
+      renders three card titles, renders icons, renders Boka nu button.
+
+  - id: TASK-006
+    title: Build FooterSection component
+    done: true
+    depends_on: [TASK-001]
+    components: [FooterSection]
+    stories: [US-006]
+    requirements: [SVC-018, SVC-019]
+    description: >-
+      Create src/components/FooterSection.tsx. "Toyota Originalservice" title,
+      three feature tags (Hybrid-expertis, Vägassistans ingår, Auktoriserad
+      personal), bottom nav icons (calculate, history_toggle_off, storefront).
+      Write RTL tests: renders title, feature tags, nav icons.
+
+  - id: TASK-007
+    title: Integrate App shell with new components
+    done: true
+    depends_on: [TASK-002, TASK-003, TASK-004, TASK-005, TASK-006]
+    components: [App, Navbar, HeroSection, CalculatorSection, ValueCards, FooterSection]
+    stories: [US-001, US-002, US-003, US-004, US-005, US-006, US-007]
+    requirements: [SVC-005, SVC-006, SVC-007, SVC-008, SVC-009, SVC-021, SVC-022, SVC-023]
+    description: >-
+      Rewrite src/App.tsx. State: km (default 1000), result (computed from
+      lookupInterval on every slider change). Render sections vertically:
+      Navbar, HeroSection, CalculatorSection (with glassmorphism panel),
+      ValueCards, FooterSection. Max-width container for 1280px desktop.
+      Surface background with tonal section shifts. Remove old Header,
+      CalculatorForm, ResultDisplay components and their test files.
+      Update App.test.tsx integration tests: renders all sections, slider
+      at default shows 360 days, moving slider updates result, 5500 shows
+      98 days. Run full build to verify offline bundle with icons.
